@@ -1,5 +1,5 @@
 //
-//  StringFindTests.swift
+//  StringSearchTests.swift
 //
 //
 //  Created by BR on 2024/10/27.
@@ -7,7 +7,7 @@
 
 import XCTest
 
-final class StringFindTests: XCTestCase {
+final class StringSearchTests: XCTestCase {
     
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
