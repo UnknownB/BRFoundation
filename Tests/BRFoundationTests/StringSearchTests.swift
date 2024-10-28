@@ -17,6 +17,8 @@ final class StringSearchTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
+    // MARK: - find(head:end:)
+    
     func testFindWithHeadAndEndPresent() {
         let testString = "Start [head] content [end] remaining"
         let result = testString.find(head: "[head]", end: "[end]")
@@ -63,5 +65,47 @@ final class StringSearchTests: XCTestCase {
         
         XCTAssertEqual(result.matchedSubstring, "[marker] content [marker]", "Expected to match content between identical head and end markers")
         XCTAssertEqual(result.afterEndSubstring, " with more text", "Expected remaining string after the matched segment")
+    }
+    
+    // MARK: - find(head:to:)
+    
+    func testFindWithValidHeadAndEnd() {
+        let testString = "這是一段測試字符串 [head] 這是匹配內容 [end] 後續內容"
+        let result = testString.find(head: "[head]", to: "[end]")
+        
+        XCTAssertEqual(result.matchedSubstring, " 這是匹配內容 ", "應該返回 head 到 end 之間的內容")
+        XCTAssertEqual(result.afterEndSubstring, " 後續內容", "應該返回 end 後的剩餘內容")
+    }
+    
+    func testFindWithNotHead() {
+        let testString = "這是一段測試字符串 這是匹配內容 [end] 後續內容"
+        let result = testString.find(head: "[head]", to: "[end]")
+        
+        XCTAssertNil(result.matchedSubstring, "找不到 head 時應該返回 nil")
+        XCTAssertEqual(result.afterEndSubstring, testString, "找不到 head 時應返回原始字符串作為 afterEndSubstring")
+    }
+    
+    func testFindWithNoEnd() {
+        let testString = "這是一段測試字符串 [head] 這是匹配內容 後續內容"
+        let result = testString.find(head: "[head]", to: "[end]")
+        
+        XCTAssertNil(result.matchedSubstring, "找不到 end 時應該返回 nil")
+        XCTAssertEqual(result.afterEndSubstring, testString, "找不到 end 時應返回原始字符串作為 afterEndSubstring")
+    }
+    
+    func testFindWithHeadAdjacentToEnd() {
+        let testString = "這是一段測試字符串 [head][end] 後續內容"
+        let result = testString.find(head: "[head]", to: "[end]")
+        
+        XCTAssertEqual(result.matchedSubstring, "", "當 head 和 end 相鄰時應返回空字符串")
+        XCTAssertEqual(result.afterEndSubstring, " 後續內容", "應返回 end 後的剩餘內容")
+    }
+    
+    func testFindWithHeadEqualsEnd() {
+        let testString = "這是一段測試字符串 [head] 這是匹配內容 [head] 後續內容"
+        let result = testString.find(head: "[head]", to: "[head]")
+        
+        XCTAssertEqual(result.matchedSubstring, " 這是匹配內容 ", "應該返回第一次匹配到的 head 到 end 之間的內容")
+        XCTAssertEqual(result.afterEndSubstring, " 後續內容", "應返回第二個 head 後的剩餘內容")
     }
 }
