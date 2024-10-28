@@ -47,40 +47,32 @@ extension String {
     }
     
     
-    /// 在字符串中查找從 `head` 到 `end` 之間的子字符串
+    /// 在字符串中查找從 `start` 到 `end` 之間的子字符串
     ///
-    ///     let testString = "Start [head] content [end] remaining"
-    ///     let result = testString.find(head: "[head]", to: "[end]")
+    ///     let testString = "Start [start] content [end] remaining"
+    ///     let result = testString.find(delimitedBy: "[start]", and: "[end]")
     ///
-    ///     print(result.matchedSubstring) // "content"
-    ///     print(result.afterEndSubstring) // " remaining"
+    ///     print(result.between) // "content"
+    ///     print(result.remaining) // " remaining"
     ///
     /// - Parameters:
-    ///   - head: 起始的字串標記
+    ///   - start: 起始的字串標記
     ///   - end: 結尾的字串標記
-    /// - Returns: matched: (matched 之間的字串, end 後的字串), not matched: (nil, 原始字串)
-    public func find(head: String, to end: String) -> (matchedSubstring: String?, afterEndSubstring: String) {
-        // 找到 head 的範圍
-        guard let headRange = self.range(of: head) else {
-            return (nil, self)
-        }
+    /// - Returns: matched: (matched 之間的字串, end 後的字串), not matched: nil
+    public func findBetween(delimitedBy start: String, and end: String) -> (between: String, remaining: String)? {
+        guard let startRange = self.range(of: start) else { return nil }
         
-        // 查找 head 後面的部分
-        let substringAfterHead = self[headRange.upperBound...]
+        let substringAfterStart = self[startRange.upperBound...]
         
-        // 找到 end 的範圍
-        guard let endRange = substringAfterHead.range(of: end) else {
-            return (nil, self)
-        }
+        guard let endRange = substringAfterStart.range(of: end) else { return nil }
         
-        // 提取從 head 到 end 之間的字串 head[...]end
-        let matchedSubstring = String(self[headRange.upperBound..<endRange.lowerBound])
+        // 獲取 start 和 end 之間的內容
+        let between = String(self[startRange.upperBound..<endRange.lowerBound])
         
-        // 提取 end 後的部分
-        let afterEndSubstring = String(substringAfterHead[endRange.upperBound...])
+        // 獲取 end 後的內容
+        let remaining = String(substringAfterStart[endRange.upperBound...])
         
-        return (matchedSubstring, afterEndSubstring)
+        return (between, remaining)
     }
-    
     
 }
