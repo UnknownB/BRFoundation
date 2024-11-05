@@ -23,18 +23,14 @@ extension String {
     ///   - end: 結尾的字串標記
     ///
     /// - Returns: matched: (matched 字串, end 後的字串), not matched: (nil, 原始字串)
-    public func find(head: String, end: String) -> (matchedSubstring: String?, afterEndSubstring: String) {
-        // 找到 head 的範圍
+    public func find(head: String, end: String) -> (matchedSubstring: String, afterEndSubstring: String)? {
         guard let headRange = self.range(of: head) else {
-            return (nil, self)
+            return nil
         }
-        
-        // 查找 head 後面的部分
         let substringAfterHead = self[headRange.upperBound...]
         
-        // 找到 end 的範圍
         guard let endRange = substringAfterHead.range(of: end) else {
-            return (nil, self)
+            return nil
         }
         
         // 提取從 head 到 end 的子字串 [head...end]

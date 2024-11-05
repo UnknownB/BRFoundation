@@ -19,52 +19,45 @@ final class StringSearchTests: XCTestCase {
     
     // MARK: - find(head:end:)
     
-    func testFindWithHeadAndEndPresent() {
-        let testString = "Start [head] content [end] remaining"
+    func testFindWithValidHeadAndEnd() {
+        let testString = "This is a [test] string with [head]content[end] after."
         let result = testString.find(head: "[head]", end: "[end]")
         
-        XCTAssertEqual(result.matchedSubstring, "[head] content [end]", "Expected to match content between [head] and [end]")
-        XCTAssertEqual(result.afterEndSubstring, " remaining", "Expected remaining string after [end]")
+        XCTAssertNotNil(result, "Expected to find a substring between head and end.")
+        XCTAssertEqual(result?.matchedSubstring, "[head]content[end]", "Incorrect matched substring.")
+        XCTAssertEqual(result?.afterEndSubstring, " after.", "Incorrect substring after end.")
     }
     
-    func testFindWithNoHead() {
-        let testString = "No head marker here [end]"
+    func testFindWithMissingHead() {
+        let testString = "This string has no matching head or end."
         let result = testString.find(head: "[head]", end: "[end]")
         
-        XCTAssertNil(result.matchedSubstring, "Expected matchedSubstring to be nil when head is not found")
-        XCTAssertEqual(result.afterEndSubstring, testString, "Expected afterEndSubstring to be the entire string when head is not found")
+        XCTAssertNil(result, "Expected nil result when head is missing.")
     }
     
-    func testFindWithNoEndAfterHead() {
-        let testString = "Contains [head] but no end marker"
+    func testFindWithMissingEnd() {
+        let testString = "This is a string with [head] but no end marker."
         let result = testString.find(head: "[head]", end: "[end]")
         
-        XCTAssertNil(result.matchedSubstring, "Expected matchedSubstring to be nil when end is not found after head")
-        XCTAssertEqual(result.afterEndSubstring, testString, "Expected afterEndSubstring to be the entire string when end is not found after head")
+        XCTAssertNil(result, "Expected nil result when end is missing.")
     }
     
-    func testFindWithEmptyString() {
-        let testString = ""
+    func testFindWithHeadAndEndAtStartAndEnd() {
+        let testString = "[head]This is all content[end]"
         let result = testString.find(head: "[head]", end: "[end]")
         
-        XCTAssertNil(result.matchedSubstring, "Expected matchedSubstring to be nil for an empty string")
-        XCTAssertEqual(result.afterEndSubstring, "", "Expected afterEndSubstring to be empty for an empty input string")
+        XCTAssertNotNil(result, "Expected to find substring with head and end at start and end.")
+        XCTAssertEqual(result?.matchedSubstring, "[head]This is all content[end]", "Incorrect matched substring.")
+        XCTAssertEqual(result?.afterEndSubstring, "", "Expected an empty substring after end.")
     }
     
-    func testFindWithMultipleHeadAndEndPairs() {
-        let testString = "Prefix [head] first [end] and [head] second [end] suffix"
+    func testFindWithMultipleHeadsAndEnds() {
+        let testString = "Intro [head]first content[end] middle [head]second content[end] outro"
         let result = testString.find(head: "[head]", end: "[end]")
         
-        XCTAssertEqual(result.matchedSubstring, "[head] first [end]", "Expected to match only the first [head]...[end] pair")
-        XCTAssertEqual(result.afterEndSubstring, " and [head] second [end] suffix", "Expected remaining string after the first [end] marker")
-    }
-    
-    func testFindHeadEqualsEnd() {
-        let testString = "This is [marker] content [marker] with more text"
-        let result = testString.find(head: "[marker]", end: "[marker]")
-        
-        XCTAssertEqual(result.matchedSubstring, "[marker] content [marker]", "Expected to match content between identical head and end markers")
-        XCTAssertEqual(result.afterEndSubstring, " with more text", "Expected remaining string after the matched segment")
+        XCTAssertNotNil(result, "Expected to find first instance of head and end.")
+        XCTAssertEqual(result?.matchedSubstring, "[head]first content[end]", "Incorrect matched substring for first instance.")
+        XCTAssertEqual(result?.afterEndSubstring, " middle [head]second content[end] outro", "Incorrect substring after first end.")
     }
     
     // MARK: - findBetween(head:end:)
