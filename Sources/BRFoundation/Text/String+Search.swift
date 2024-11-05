@@ -47,32 +47,36 @@ extension String {
     }
     
     
-    /// 在字符串中查找從 `start` 到 `end` 之間的子字符串
+    /// 在字符串中查找從 `head` 到 `end` 之間的子字符串
     ///
-    ///     let testString = "Start [start] content [end] remaining"
-    ///     let result = testString.find(delimitedBy: "[start]", and: "[end]")
+    ///     let testString = "<a href=http...</a></div>"
     ///
-    ///     print(result.between) // "content"
-    ///     print(result.remaining) // " remaining"
+    ///     let result = testString.findBetween(head: "<a href=", end: "</a>")
+    ///
+    ///     print(result.matchedSubstring) // "http..."
+    ///     print(result.afterEndSubstring) // "</div>"
     ///
     /// - Parameters:
-    ///   - start: 起始的字串標記
+    ///   - head: 起始的字串標記
     ///   - end: 結尾的字串標記
     /// - Returns: matched: (matched 之間的字串, end 後的字串), not matched: nil
-    public func findBetween(delimitedBy start: String, and end: String) -> (between: String, remaining: String)? {
-        guard let startRange = self.range(of: start) else { return nil }
+    public func findBetween(head: String, end: String) -> (matchedSubstring: String, afterEndSubstring: String)? {
+        guard let headRange = self.range(of: head) else { 
+            return nil
+        }
+        let substringAfterStart = self[headRange.upperBound...]
         
-        let substringAfterStart = self[startRange.upperBound...]
+        guard let endRange = substringAfterStart.range(of: end) else { 
+            return nil
+        }
         
-        guard let endRange = substringAfterStart.range(of: end) else { return nil }
-        
-        // 獲取 start 和 end 之間的內容
-        let between = String(self[startRange.upperBound..<endRange.lowerBound])
+        // 獲取 head 和 end 之間的內容, head[...]end
+        let matchedSubstring = String(self[headRange.upperBound..<endRange.lowerBound])
         
         // 獲取 end 後的內容
-        let remaining = String(substringAfterStart[endRange.upperBound...])
+        let afterEndSubstring = String(substringAfterStart[endRange.upperBound...])
         
-        return (between, remaining)
+        return (matchedSubstring, afterEndSubstring)
     }
     
 }

@@ -67,46 +67,46 @@ final class StringSearchTests: XCTestCase {
         XCTAssertEqual(result.afterEndSubstring, " with more text", "Expected remaining string after the matched segment")
     }
     
-    // MARK: - findBetween(delimitedBy:and:)
+    // MARK: - findBetween(head:end:)
     
     func testFindBetweenWithValidDelimiters() {
         let testString = "這是一段測試字符串 [start] 這是匹配內容 [end] 後續內容"
-        let result = testString.findBetween(delimitedBy: "[start]", and: "[end]")
+        let result = testString.findBetween(head: "[start]", end: "[end]")
         
         XCTAssertNotNil(result, "應該找到 start 和 end 的範圍")
-        XCTAssertEqual(result?.between, " 這是匹配內容 ", "應該返回 start 和 end 之間的內容")
-        XCTAssertEqual(result?.remaining, " 後續內容", "應該返回 end 後的剩餘內容")
+        XCTAssertEqual(result?.matchedSubstring, " 這是匹配內容 ", "應該返回 start 和 end 之間的內容")
+        XCTAssertEqual(result?.afterEndSubstring, " 後續內容", "應該返回 end 後的剩餘內容")
     }
     
     func testFindBetweenWithNoStartDelimiter() {
         let testString = "這是一段測試字符串 這是匹配內容 [end] 後續內容"
-        let result = testString.findBetween(delimitedBy: "[start]", and: "[end]")
+        let result = testString.findBetween(head: "[start]", end: "[end]")
         
         XCTAssertNil(result, "找不到 start 時應返回 nil")
     }
     
     func testFindBetweenWithNoEndDelimiter() {
         let testString = "這是一段測試字符串 [start] 這是匹配內容 後續內容"
-        let result = testString.findBetween(delimitedBy: "[start]", and: "[end]")
+        let result = testString.findBetween(head: "[start]", end: "[end]")
         
         XCTAssertNil(result, "找不到 end 時應返回 nil")
     }
     
     func testFindBetweenWithStartAdjacentToEnd() {
         let testString = "這是一段測試字符串 [start][end] 後續內容"
-        let result = testString.findBetween(delimitedBy: "[start]", and: "[end]")
+        let result = testString.findBetween(head: "[start]", end: "[end]")
         
         XCTAssertNotNil(result, "應該找到 start 和 end 的範圍")
-        XCTAssertEqual(result?.between, "", "當 start 和 end 相鄰時應返回空字符串")
-        XCTAssertEqual(result?.remaining, " 後續內容", "應返回 end 後的剩餘內容")
+        XCTAssertEqual(result?.matchedSubstring, "", "當 start 和 end 相鄰時應返回空字符串")
+        XCTAssertEqual(result?.afterEndSubstring, " 後續內容", "應返回 end 後的剩餘內容")
     }
     
     func testFindBetweenWithIdenticalDelimiters() {
         let testString = "這是一段測試字符串 [start] 這是匹配內容 [start] 後續內容"
-        let result = testString.findBetween(delimitedBy: "[start]", and: "[start]")
+        let result = testString.findBetween(head: "[start]", end: "[start]")
         
         XCTAssertNotNil(result, "應該找到 start 到下一個 start 的範圍")
-        XCTAssertEqual(result?.between, " 這是匹配內容 ", "應該返回第一次匹配到的 start 到下一個 start 之間的內容")
-        XCTAssertEqual(result?.remaining, " 後續內容", "應返回第二個 start 後的剩餘內容")
+        XCTAssertEqual(result?.matchedSubstring, " 這是匹配內容 ", "應該返回第一次匹配到的 start 到下一個 start 之間的內容")
+        XCTAssertEqual(result?.afterEndSubstring, " 後續內容", "應返回第二個 start 後的剩餘內容")
     }
 }
