@@ -7,13 +7,13 @@
 
 import Foundation
 
-extension String {
-    
+public extension BRWrapper where Base == String {
+
     
     /// 查找第一個被 `head` 和 `end` 包裹的子字串，並返回該子字串與 `end` 之後的剩餘字串
     ///
     ///     let testString = "Start [head] content [end] remaining"
-    ///     let result = testString.find(head: "[head]", end: "[end]")
+    ///     let result = testString.br.find(head: "[head]", end: "[end]")
     ///
     ///     print(result.matchedSubstring) // "[head] content [end]"
     ///     print(result.afterEndSubstring) // " remaining"
@@ -23,18 +23,18 @@ extension String {
     ///   - end: 結尾的字串標記
     ///
     /// - Returns: matched: (matched 字串, end 後的字串), not matched: (nil, 原始字串)
-    public func find(head: String, end: String) -> (matchedSubstring: String, afterEndSubstring: String)? {
-        guard let headRange = self.range(of: head) else {
+    func find(head: String, end: String) -> (matchedSubstring: String, afterEndSubstring: String)? {
+        guard let headRange = base.range(of: head) else {
             return nil
         }
-        let substringAfterHead = self[headRange.upperBound...]
+        let substringAfterHead = base[headRange.upperBound...]
         
         guard let endRange = substringAfterHead.range(of: end) else {
             return nil
         }
         
         // 提取從 head 到 end 的子字串 [head...end]
-        let matchedSubstring = String(self[headRange.lowerBound..<endRange.upperBound])
+        let matchedSubstring = String(base[headRange.lowerBound..<endRange.upperBound])
         
         // 提取 end 後的部分
         let afterEndSubstring = String(substringAfterHead[endRange.upperBound...])
@@ -47,7 +47,7 @@ extension String {
     ///
     ///     let testString = "<a href=http...</a></div>"
     ///
-    ///     let result = testString.findBetween(head: "<a href=", end: "</a>")
+    ///     let result = testString.br.findBetween(head: "<a href=", end: "</a>")
     ///
     ///     print(result.matchedSubstring) // "http..."
     ///     print(result.afterEndSubstring) // "</div>"
@@ -56,18 +56,18 @@ extension String {
     ///   - head: 起始的字串標記
     ///   - end: 結尾的字串標記
     /// - Returns: matched: (matched 之間的字串, end 後的字串), not matched: nil
-    public func findBetween(head: String, end: String) -> (matchedSubstring: String, afterEndSubstring: String)? {
-        guard let headRange = self.range(of: head) else { 
+    func findBetween(head: String, end: String) -> (matchedSubstring: String, afterEndSubstring: String)? {
+        guard let headRange = base.range(of: head) else {
             return nil
         }
-        let substringAfterStart = self[headRange.upperBound...]
+        let substringAfterStart = base[headRange.upperBound...]
         
         guard let endRange = substringAfterStart.range(of: end) else { 
             return nil
         }
         
         // 獲取 head 和 end 之間的內容, head[...]end
-        let matchedSubstring = String(self[headRange.upperBound..<endRange.lowerBound])
+        let matchedSubstring = String(base[headRange.upperBound..<endRange.lowerBound])
         
         // 獲取 end 後的內容
         let afterEndSubstring = String(substringAfterStart[endRange.upperBound...])
