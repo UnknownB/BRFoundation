@@ -56,4 +56,23 @@ public extension BRWrapper where Base == URL {
     }
     
     
+    /// 獲取 URL 的查詢參數字典
+    ///
+    ///     let url = URL(string: "https://example.com?key=value&another=1")!
+    ///     let queryDict = url.br.decodedQueryParameters()
+    ///     print(queryDict) // ["key": "value", "another": "1"]
+    ///
+    /// - Returns: 查詢參數的字典
+    func decodedQueryParameters() -> [String: String] {
+        guard let components = URLComponents(url: base, resolvingAgainstBaseURL: false),
+              let queryItems = components.queryItems else {
+            return [:]
+        }
+        
+        return queryItems.reduce(into: [String: String]()) { dict, item in
+            dict[item.name] = item.value?.removingPercentEncoding ?? item.value
+        }
+    }
+    
+    
 }
