@@ -7,8 +7,8 @@
 
 import Foundation
 
-
 public extension BRWrapper where Base: RangeReplaceableCollection & MutableCollection {
+    
     
     /// 將所有滿足條件的元素替換成新元素
     ///
@@ -28,4 +28,6 @@ public extension BRWrapper where Base: RangeReplaceableCollection & MutableColle
         }
         return array
     }
+    
+    
 }
