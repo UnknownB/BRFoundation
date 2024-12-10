@@ -32,4 +32,28 @@ public extension BRWrapper where Base == URL {
     }
     
     
+    /// 使用字典批量追加查詢參數
+    ///
+    ///     let url = URL(string: "https://example.com")!
+    ///     let newUrl = url.br.appendingQuery(from: ["key1": "value1", "key2": "value2"])
+    ///     print(newUrl) // "https://example.com?key1=value1&key2=value2"
+    ///
+    /// - Parameter query: 查詢參數的字典
+    /// - Returns: 帶有新查詢參數的 URL
+    func appendingQuery(from query: [String: String]) -> URL? {
+        guard var components = URLComponents(url: base, resolvingAgainstBaseURL: false) else {
+            return nil
+        }
+        var queryItems = components.queryItems ?? []
+        
+        for (key, value) in query {
+            let queryValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            queryItems.append(URLQueryItem(name: key, value: queryValue))
+        }
+        
+        components.queryItems = queryItems
+        return components.url
+    }
+    
+    
 }
