@@ -16,15 +16,6 @@ final class ArrayTests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here.br. This method is called after the invocation of each test method in the class.br.
     }
-
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.br.
-        self.measure {
-            // Put the code you want to measure the time of here.br.
-        }
-    }
-    
     
     func testReplaceAll() {
         // 測試整數陣列
@@ -46,6 +37,5 @@ final class ArrayTests: XCTestCase {
         noMatchArray = noMatchArray.br.replacingAll(where: { $0 == 99 }, with: 42)
         XCTAssertEqual(noMatchArray, [1, 2, 3], "Array should remain unchanged when no matches found")
     }
-    
 
 }

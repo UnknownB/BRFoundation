@@ -21,7 +21,6 @@ public extension BRWrapper where Base == String {
     /// - Parameters:
     ///   - head: 起始的字串標記
     ///   - end: 結尾的字串標記
-    ///
     /// - Returns: matched: (matched 字串, end 後的字串), not matched: (nil, 原始字串)
     func find(head: String, end: String) -> (matchedSubstring: String, afterEndSubstring: String)? {
         guard let headRange = base.range(of: head) else {

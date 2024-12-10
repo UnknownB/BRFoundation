@@ -9,6 +9,7 @@ import Foundation
 
 public extension BRWrapper where Base: RangeReplaceableCollection, Base.Element: Equatable {
     
+    
     /// 刪除陣列中第一個指定的元素
     ///
     ///     let array = [1, 2, 3, 2, 4]
@@ -24,4 +25,5 @@ public extension BRWrapper where Base: RangeReplaceableCollection, Base.Element:
         return array
     }
 
+    
 }
