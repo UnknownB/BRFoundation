@@ -8,16 +8,20 @@
 import Foundation
 
 public struct BRWrapper<Base> {
-    var base: Base
+    public var base: Base
 
-    init(_ base: Base) {
+    public init(_ base: Base) {
         self.base = base
     }
 }
 
 public protocol BRWrapperProtocol {
-    var br: BRWrapper<Self> { get }
-    static var br: BRWrapper<Self>.Type { get }
+    
+    // 讓非 final 型別能遵守協定
+    associatedtype Base
+    
+    var br: BRWrapper<Base> { get }
+    static var br: BRWrapper<Base>.Type { get }
 }
 
 public extension BRWrapperProtocol {
