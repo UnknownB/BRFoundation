@@ -8,7 +8,7 @@
 import Foundation
 
 
-protocol BRJSONCodable: Codable {
+public protocol BRJSONCodable: Codable {
     func toJSONData() throws -> Data
     func toJSONString() throws -> String
     static func fromJSONData(_ data: Data) throws -> Self
