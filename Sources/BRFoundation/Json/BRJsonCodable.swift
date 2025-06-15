@@ -16,7 +16,7 @@ public protocol BRJSONCodable: Codable {
 }
 
 
-extension BRJSONCodable {
+public extension BRJSONCodable {
     
     
     /// 轉換成 Json data
