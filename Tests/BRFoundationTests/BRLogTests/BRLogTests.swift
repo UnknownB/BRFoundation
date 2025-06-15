@@ -5,30 +5,42 @@
 //  Created by BR on 2025/3/27.
 //
 
-import XCTest
+import Testing
 @testable import BRFoundation
 
-final class BRLogTests: XCTestCase {
+@Suite("BRLogTests")
+struct BRLogTests {
     
     
+    @Test("format")
     func testLogFormat() {
-        let log = BRLog.format("admin: BR", "password: ******")
-        XCTAssertEqual(log, "BRLogTests・15 -- admin: BR, password: ******")  // 在 XCTest 環境無法取得 app.log
+        let log = BRLog.format("admin: BR", "password: ******", tag: "Test")
+        #expect(log == "[Test] BRLogTests・17 -- admin: BR, password: ******")
     }
     
     
+    @Test("printLog")
     func testPrintLog() {
-        BRLog.printDebug("debug")
-        BRLog.printInfo("info")
-        BRLog.printNotice("notice")
-        BRLog.printError("error")
-        BRLog.printFault("fault")
+        BRLog.printTest.debug("debug")
+        BRLog.printTest.info("info")
+        BRLog.printTest.notice("notice")
+        BRLog.printTest.error("error")
+        BRLog.printTest.fault("fault")
         let appLog = BRLog.fetchPrintLog()
-        XCTAssertEqual(appLog, "")  // 在 XCTest 環境無法取得 app.log
+        
+        var logs = ""
+        logs += "🛠️ [Test] BRLogTests・24 -- debug\n"
+        logs += "⚙️ [Test] BRLogTests・25 -- info\n"
+        logs += "☑️ [Test] BRLogTests・26 -- notice\n"
+        logs += "❌ [Test] BRLogTests・27 -- error\n"
+        logs += "⚠️ [Test] BRLogTests・28 -- fault\n"
+
+        #expect(appLog == logs)
     }
     
     
     @available(iOS 15.0, *)
+    @Test("OSLog")
     func testOSLog() throws {
         BRLog.test.debug("debug")
         BRLog.test.info("info")
@@ -37,6 +49,6 @@ final class BRLogTests: XCTestCase {
         BRLog.test.fault("fault")
         
         let logs = try BRLog.fetchOSLogStore()
-        XCTAssertTrue(logs.count >= 5)
+        #expect(logs.count >= 5)
     }
 }

@@ -15,10 +15,10 @@ struct BRTimeZoneUtilTests {
     
     @Test("TimeZone Description")
     func testTimeZoneDescription() {
-        BRLog.printInfo("Identifier:", BRTimeZoneUtil.identifier)
-        BRLog.printInfo("GMT Offset:", BRTimeZoneUtil.formattedGMTOffset)
-        BRLog.printInfo("Localized:", BRTimeZoneUtil.localizedName)
-        BRLog.printInfo("Full Desc :", BRTimeZoneUtil.fullDescription)
+        BRLog.printTest.info("Identifier:", BRTimeZoneUtil.identifier)
+        BRLog.printTest.info("GMT Offset:", BRTimeZoneUtil.formattedGMTOffset)
+        BRLog.printTest.info("Localized:", BRTimeZoneUtil.localizedName)
+        BRLog.printTest.info("Full Desc :", BRTimeZoneUtil.fullDescription)
         
         #expect(!BRTimeZoneUtil.identifier.isEmpty)
         #expect(BRTimeZoneUtil.formattedGMTOffset.contains(":"))
