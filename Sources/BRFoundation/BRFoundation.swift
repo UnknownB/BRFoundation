@@ -30,9 +30,11 @@ public extension BRWrapperProtocol {
 
 
 extension Array: BRWrapperProtocol {}
-extension String: BRWrapperProtocol {}
-extension URL: BRWrapperProtocol {}
 extension Date: BRWrapperProtocol {}
 extension Dictionary: BRWrapperProtocol {}
+extension String: BRWrapperProtocol {}
+extension URL: BRWrapperProtocol {}
+extension URLSession: BRWrapperProtocol {}
+
 @available(iOS 13.0, *)
 public protocol BRObservableObject: BRWrapperProtocol, ObservableObject {}
