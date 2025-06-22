@@ -34,3 +34,5 @@ extension String: BRWrapperProtocol {}
 extension URL: BRWrapperProtocol {}
 extension Date: BRWrapperProtocol {}
 extension Dictionary: BRWrapperProtocol {}
+@available(iOS 13.0, *)
+public protocol BRObservableObject: BRWrapperProtocol, ObservableObject {}
