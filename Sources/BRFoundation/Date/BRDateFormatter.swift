@@ -61,6 +61,22 @@ public enum BRDateFormatter {
     }()
     
     
+    /// MySQL 格式
+    ///
+    /// - 特性
+    ///     - 後端語言預設輸出
+    ///     - 標準 UTC 時間
+    /// - 範例
+    ///     - `2025-07-17 01:04:04`
+    static let mySQLFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(identifier: "UTC")
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return formatter
+    }()
+    
+    
     /// 本地日期 (`yyyy-MM-dd`)
     ///
     /// - 特性

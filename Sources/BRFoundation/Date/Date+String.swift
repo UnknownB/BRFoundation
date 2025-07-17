@@ -51,6 +51,15 @@ public extension BRWrapper where Base == Date {
     }
     
     
+    /// 將 MySQL DATETIME 格式字串轉換為 Date
+    ///
+    /// - 範例
+    ///     - `2025-07-17 01:04:04`
+    static func fromMySQLDateString(_ mySQLDateString: String) -> Date? {
+        return BRDateFormatter.mySQLFormatter.date(from: mySQLDateString)
+    }
+    
+    
     /// 本地日期 (`yyyy-MM-dd`) 轉換為 Date
     ///
     /// - 範例
@@ -153,6 +162,15 @@ public extension BRWrapper where Base == Date {
     }
     
     
+    /// 將日期轉換為 MySQL DATETIME 格式字串
+    ///
+    /// - 範例
+    ///     - `2025-07-17 01:04:04`
+    func mySQLDateString() -> String {
+        return BRDateFormatter.mySQLFormatter.string(from: base)
+    }
+
+        
     /// 本地日期 (`yyyy-MM-dd`) 轉換成字串
     ///
     /// - 範例

@@ -41,6 +41,15 @@ struct DateStringConversionTests {
     }
     
     
+    @Test("MySQL DATETIME")
+    func testMySQLDateConversion() throws {
+        let original = "2025-07-17 01:04:04"
+        let date = Date.br.fromMySQLDateString(original)
+        #expect(date != nil)
+        #expect(BRWrapper(date!).mySQLDateString() == "2025-07-17 01:04:04")
+    }
+    
+    
     @Test("Local YMD Dash")
     func testLocalYMDDashConversion() throws {
         let original = "2025-04-21"
