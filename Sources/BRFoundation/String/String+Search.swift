@@ -10,18 +10,16 @@ import Foundation
 public extension BRWrapper where Base == String {
 
     
-    /// 查找第一個被 `head` 和 `end` 包裹的子字串，並返回該子字串與 `end` 之後的剩餘字串
+    /// 搜尋符合 `head`...`end` 的字串，成功時獲得 `head`...`end` 字串
     ///
-    ///     let testString = "Start [head] content [end] remaining"
-    ///     let result = testString.br.find(head: "[head]", end: "[end]")
+    /// ```swift
+    /// let testString = "Start [head] content [end] remaining"
+    /// let result = testString.br.find(head: "[head]", end: "[end]")
     ///
-    ///     print(result.matchedSubstring) // "[head] content [end]"
-    ///     print(result.afterEndSubstring) // " remaining"
+    /// print(result.matchedSubstring) // "[head] content [end]"
+    /// print(result.afterEndSubstring) // " remaining"
+    /// ```
     ///
-    /// - Parameters:
-    ///   - head: 起始的字串標記
-    ///   - end: 結尾的字串標記
-    /// - Returns: matched: (matched 字串, end 後的字串), not matched: (nil, 原始字串)
     func find(head: String, end: String) -> (matchedSubstring: String, afterEndSubstring: String)? {
         guard let headRange = base.range(of: head) else {
             return nil
@@ -42,19 +40,16 @@ public extension BRWrapper where Base == String {
     }
     
     
-    /// 在字符串中查找從 `head` 到 `end` 之間的子字符串
+    /// 搜尋符合 `head`...`end` 的字串，成功時獲得 `...` 字串
     ///
-    ///     let testString = "<a href=http...</a></div>"
+    /// ```swift
+    /// let testString = "<a href=http...</a></div>"
     ///
-    ///     let result = testString.br.findBetween(head: "<a href=", end: "</a>")
+    /// let result = testString.br.findBetween(head: "<a href=", end: "</a>")
     ///
-    ///     print(result.matchedSubstring) // "http..."
-    ///     print(result.afterEndSubstring) // "</div>"
-    ///
-    /// - Parameters:
-    ///   - head: 起始的字串標記
-    ///   - end: 結尾的字串標記
-    /// - Returns: matched: (matched 之間的字串, end 後的字串), not matched: nil
+    /// print(result.matchedSubstring) // "http..."
+    /// print(result.afterEndSubstring) // "</div>"
+    /// ```
     func findBetween(head: String, end: String) -> (matchedSubstring: String, afterEndSubstring: String)? {
         guard let headRange = base.range(of: head) else {
             return nil
