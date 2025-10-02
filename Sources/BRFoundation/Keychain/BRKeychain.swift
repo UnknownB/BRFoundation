@@ -89,11 +89,11 @@ public class BRKeychain {
         }
     }
     
-    private let service: String
+    private let service: String?
     private let accessGroup: String?
     
     
-    public init(service: String = Bundle.main.bundleIdentifier ?? "com.br.brfoundation.keychain", accessGroup: String? = nil) {
+    public init(service: String? = Bundle.main.bundleIdentifier, accessGroup: String? = nil) {
         self.service = service
         self.accessGroup = accessGroup
     }
@@ -106,11 +106,8 @@ public class BRKeychain {
         query[kSecClass as String] = kSecClassGenericPassword
         query[kSecAttrService as String] = service
         query[kSecAttrAccount as String] = account.rawValue
-        
-        if let accessGroup = accessGroup {
-            query[kSecAttrAccessGroup as String] = accessGroup
-        }
-        
+        query[kSecAttrAccessGroup as String] = accessGroup
+
         return query
     }
     
