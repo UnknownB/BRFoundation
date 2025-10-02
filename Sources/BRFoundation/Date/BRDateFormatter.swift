@@ -17,7 +17,7 @@ public enum BRDateFormatter {
     ///     - 標準 UTC 時間
     /// - 範例
     ///     - `2025-04-21T22:12:00Z`
-    static let iso8601Formatter: ISO8601DateFormatter = {
+    public static let iso8601Formatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         formatter.formatOptions = [
@@ -34,7 +34,7 @@ public enum BRDateFormatter {
     ///     - 精確到毫秒
     /// - 範例
     ///     - `2025-04-21T22:12:00.123Z`
-    static let iso8601MsFormatter: ISO8601DateFormatter = {
+    public static let iso8601MsFormatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         formatter.formatOptions = [
@@ -52,7 +52,7 @@ public enum BRDateFormatter {
     ///     - 支援時區偏移表示
     /// - 範例
     ///     - `2025-04-21T22:12:00+00:00`
-    static let rfc3339Formatter: DateFormatter = {
+    public static let rfc3339Formatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
@@ -68,7 +68,7 @@ public enum BRDateFormatter {
     ///     - 標準 UTC 時間
     /// - 範例
     ///     - `2025-07-17 01:04:04`
-    static let mySQLFormatter: DateFormatter = {
+    public static let mySQLFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.timeZone = TimeZone(identifier: "UTC")
@@ -83,7 +83,7 @@ public enum BRDateFormatter {
     ///     - 適用於日曆、日期選擇器
     /// - 範例
     ///     - `2025-04-21`
-    static let localYMDFormatterDash: DateFormatter = {
+    public static let localYMDFormatterDash: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.timeZone = TimeZone.current
@@ -98,7 +98,7 @@ public enum BRDateFormatter {
     ///     - 顯示完整西元年月日
     /// - 範例
     ///     - `2025/04/21`
-    static let localYMDFormatterSlash: DateFormatter = {
+    public static let localYMDFormatterSlash: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.timeZone = TimeZone.current
@@ -114,7 +114,7 @@ public enum BRDateFormatter {
     ///     - 適合精簡顯示、報表欄位
     /// - 範例
     ///     - `04-21`
-    static let localMDFormatterDash: DateFormatter = {
+    public static let localMDFormatterDash: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.timeZone = TimeZone.current
@@ -130,7 +130,7 @@ public enum BRDateFormatter {
     ///     - 適用於當年內的事件
     /// - 範例
     ///     - `04/21`
-    static let localMDFormatterSlash: DateFormatter = {
+    public static let localMDFormatterSlash: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.timeZone = TimeZone.current
@@ -146,7 +146,7 @@ public enum BRDateFormatter {
     ///     - 精確至分鐘
     /// - 範例
     ///     - `2025/04/21 18:30`
-    static let localYMDHmFormatterSlash: DateFormatter = {
+    public static let localYMDHmFormatterSlash: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.timeZone = TimeZone.current
@@ -161,7 +161,7 @@ public enum BRDateFormatter {
     ///     - 精確至毫秒
     /// - 範例
     ///     - `2025/04/21 18:30:45.123`
-    static let localYMDHmsFormatterSlash: DateFormatter = {
+    public static let localYMDHmsFormatterSlash: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.timeZone = TimeZone.current
@@ -176,7 +176,7 @@ public enum BRDateFormatter {
     ///     - 適合用於提醒、排程
     /// - 範例
     ///     - `18:30:45`
-    static let localHmsFormatter: DateFormatter = {
+    public static let localHmsFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.timeZone = TimeZone.current
@@ -191,7 +191,7 @@ public enum BRDateFormatter {
     ///     - 適合用於提醒、排程
     /// - 範例
     ///     - `18:30`
-    static let localHmFormatter: DateFormatter = {
+    public static let localHmFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.timeZone = TimeZone.current
@@ -201,7 +201,7 @@ public enum BRDateFormatter {
     
     
     /// 本地時間 `週日 ~ 週六`
-    static let localWeekdayFormatter: DateFormatter = {
+    public static let localWeekdayFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.timeZone = TimeZone.current
