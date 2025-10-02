@@ -53,18 +53,26 @@ public enum BRTask {
     @MainActor
     public static func run<Value>(
         operation: @escaping () async throws -> Value,
+        onStart: @escaping () -> Void = {},
         onSuccess: @escaping (Value) -> Void,
-        onFailure: @escaping (Error) -> Void = { _ in }
+        onFailure: @escaping (Error) -> Void = { _ in },
+        onComplete: @escaping () -> Void = {}
     ) -> Task<Void, Never> {
         Task {
+            await MainActor.run {
+                onStart()
+            }
+            
             do {
                 let value = try await operation()
                 await MainActor.run {
                     onSuccess(value)
+                    onComplete()
                 }
             } catch {
                 await MainActor.run {
                     onFailure(error)
+                    onComplete()
                 }
             }
         }
