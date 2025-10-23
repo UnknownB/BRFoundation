@@ -11,7 +11,21 @@ import Combine
 
 @available(iOS 13.0, *)
 public enum BRTask {
+    
+    
+    private static var storage = NSMapTable<AnyObject, NSMutableSet>(keyOptions: .weakMemory, valueOptions: .strongMemory)
 
+    
+    /// 自動儲存 cancellable，並且隨者 owner 一起釋放
+    private static func store(_ cancellable: AnyCancellable, for owner: AnyObject) {
+        if let set = storage.object(forKey: owner) {
+            set.add(cancellable)
+        } else {
+            let newSet = NSMutableSet(object: cancellable)
+            storage.setObject(newSet, forKey: owner)
+        }
+    }
+    
     
     /// 簡化 Task + do catch 的使用
     ///
@@ -128,7 +142,7 @@ public enum BRTask {
         didFinishLoading: (() -> Void)? = nil,
         idle: (() -> Void)? = nil
     ) -> AnyCancellable {
-        publisher
+        let cancellable = publisher
             .receive(on: DispatchQueue.main)
             .sink { [weak owner] state in
                 guard owner != nil else { return }
@@ -145,6 +159,8 @@ public enum BRTask {
                     failure?(error)
                 }
             }
+        store(cancellable, for: owner)
+        return cancellable
     }
     
     
@@ -189,12 +205,14 @@ public enum BRTask {
         on owner: Owner,
         sink: @escaping (Value) -> Void
     ) -> AnyCancellable {
-        publisher
+        let cancellable = publisher
             .receive(on: DispatchQueue.main)
             .sink { [weak owner] value in
                 guard owner != nil else { return }
                 sink(value)
             }
+        store(cancellable, for: owner)
+        return cancellable
     }
     
     
