@@ -1,0 +1,24 @@
+{
+  "originHash" : "0d62e275560767563f1ca30406f6d0963df4f2005c40701289d5df5649141314",
+  "pins" : [
+    {
+      "identity" : "brmacros",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/UnknownB/BRMacros",
+      "state" : {
+        "branch" : "main",
+        "revision" : "4b731a0bbee3df7762325280c9c3dfb854e10a80"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax.git",
+      "state" : {
+        "revision" : "0687f71944021d616d34d922343dcef086855920",
+        "version" : "600.0.1"
+      }
+    }
+  ],
+  "version" : 3
+}

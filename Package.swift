@@ -12,11 +12,14 @@ let package = Package(
             name: "BRFoundation",
             targets: ["BRFoundation"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/UnknownB/BRMacros", branch: "main")
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "BRFoundation"),
+            name: "BRFoundation", dependencies: ["BRMacros"]),
         .testTarget(
             name: "BRFoundationTests",
             dependencies: ["BRFoundation"]),

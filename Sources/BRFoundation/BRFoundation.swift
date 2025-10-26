@@ -1,7 +1,8 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
-import Foundation
+@_exported import Foundation
+@_exported import BRMacros
 
 
 public struct BRWrapper<Base> {
