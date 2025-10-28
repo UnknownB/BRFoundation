@@ -108,4 +108,37 @@ public struct BRMimeType: Hashable, Equatable, RawRepresentable, ExpressibleBySt
     }
     
     
+    public var fileExtension: String {
+        switch self {
+        case .jpeg: "jpg"
+        case .png: "png"
+        case .gif: "gif"
+        case .webp: "webp"
+        case .svg: "svg"
+        case .pdf: "pdf"
+        case .doc: "doc"
+        case .docx: "docx"
+        case .xls: "xls"
+        case .xlsx: "xlsx"
+        case .ppt: "ppt"
+        case .pptx: "pptx"
+        case .txt: "txt"
+        case .zip: "zip"
+        case .rar: "rar"
+        case .tar: "tar"
+        case .gzip: "gz"
+        case .mp3: "mp3"
+        case .mp4: "mp4"
+        case .avi: "avi"
+        case .mov: "mov"
+        case .wav: "wav"
+        case .json: "json"
+        case .xml: "xml"
+        case .csv: "csv"
+        default:
+            "bin"
+        }
+    }
+    
+    
 }
