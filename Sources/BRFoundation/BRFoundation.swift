@@ -31,6 +31,7 @@ public extension BRWrapperProtocol {
 
 
 extension Array: BRWrapperProtocol {}
+extension Data: BRWrapperProtocol {}
 extension Date: BRWrapperProtocol {}
 extension Dictionary: BRWrapperProtocol {}
 extension String: BRWrapperProtocol {}
