@@ -77,6 +77,22 @@ public enum BRDateFormatter {
     }()
     
     
+    /// 轉成純數字字串，格式：yyyyMMddHHmmss
+    ///
+    /// - 特性
+    ///     - 後端語言預設輸出
+    ///     - 標準 UTC 時間
+    /// - 範例
+    ///     - `20250717010404`
+    public static let numericFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(identifier: "UTC")
+        formatter.dateFormat = "yyyyMMddHHmmss"
+        return formatter
+    }()
+    
+    
     /// 本地日期 (`yyyy-MM-dd`)
     ///
     /// - 特性

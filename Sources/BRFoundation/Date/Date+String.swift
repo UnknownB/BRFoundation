@@ -60,6 +60,15 @@ public extension BRWrapper where Base == Date {
     }
     
     
+    /// 將純數字日期字串轉換為 Date
+    ///
+    /// - 範例
+    ///     - `20250717010404`
+    static func fromNumericString(_ numericString: String) -> Date? {
+        return BRDateFormatter.numericFormatter.date(from: numericString)
+    }
+    
+    
     /// 本地日期 (`yyyy-MM-dd`) 轉換為 Date
     ///
     /// - 範例
@@ -135,6 +144,12 @@ public extension BRWrapper where Base == Date {
     // MARK: Date -> String
     
     
+    /// UNIX timestamp，表示從 1970-01-01 00:00:00 UTC 到現在的秒數
+    var timeStamp: String {
+        return String(Int(base.timeIntervalSince1970))
+    }
+    
+    
     /// 將日期轉換為 ISO 8601 格式字串
     ///
     /// - 範例
@@ -168,6 +183,15 @@ public extension BRWrapper where Base == Date {
     ///     - `2025-07-17 01:04:04`
     func mySQLDateString() -> String {
         return BRDateFormatter.mySQLFormatter.string(from: base)
+    }
+    
+    
+    /// 將日期轉換為 純數字字串
+    ///
+    /// - 範例
+    ///     - `20250717010404`
+    func numericString() -> String {
+        return BRDateFormatter.numericFormatter.string(from: base)
     }
 
         
