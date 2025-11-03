@@ -64,6 +64,29 @@ public struct BRMimeType: Hashable, Equatable, RawRepresentable, ExpressibleBySt
     public static let xml: BRMimeType = "application/xml"
     public static let csv: BRMimeType = "text/csv"
     
+    
+    // MARK: - 類型判斷
+    
+    
+    public var isImage: Bool {
+        switch self {
+        case .jpeg, .png, .gif, .webp, .svg:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    
+    public var isVideo: Bool {
+        switch self {
+        case .mp4, .avi, .mov:
+            return true
+        default:
+            return false
+        }
+    }
+    
 
     // MARK: - 副檔名轉換
     
