@@ -67,14 +67,14 @@ public enum BRTask {
     @MainActor
     public static func run<Value>(
         operation: @escaping () async throws -> Value,
-        onStart: @escaping () -> Void = {},
         onSuccess: @escaping (Value) -> Void,
         onFailure: @escaping (Error) -> Void = { _ in },
+        onLoading: @escaping () -> Void = {},
         onComplete: @escaping () -> Void = {}
     ) -> Task<Void, Never> {
         Task {
             await MainActor.run {
-                onStart()
+                onLoading()
             }
             
             do {
@@ -101,11 +101,11 @@ public enum BRTask {
     /// - 參數
     ///     - publisher: Combine 流
     ///     - owner: 管理生命周期的物件，釋放後自動停止觀察
-    ///     - success: 任務成功的 closure
-    ///     - failure: 任務失敗的 closure（可選）
-    ///     - loading: 任務處理中的 closure（可選）
-    ///     - didFinishLoading: 任務處理完的 closure (可選)
-    ///     - idle: 任務未啟動的 closure（可選）
+    ///     - onSuccess: 任務成功的 closure
+    ///     - onFailure: 任務失敗的 closure（可選）
+    ///     - onLoading: 任務處理中的 closure（可選）
+    ///     - onComplete: 任務處理完的 closure (可選)
+    ///     - onIdle: 任務未啟動的 closure（可選）
     /// - 回傳
     ///     - `AnyCancellable`，需由呼叫端儲存以維持訂閱
     ///
@@ -136,27 +136,27 @@ public enum BRTask {
     public static func bind<Owner: AnyObject, Value>(
         to publisher: Published<BRTaskState<Value>>.Publisher,
         on owner: Owner,
-        success: @escaping (Value) -> Void,
-        failure: ((Error) -> Void)? = nil,
-        loading: (() -> Void)? = nil,
-        didFinishLoading: (() -> Void)? = nil,
-        idle: (() -> Void)? = nil
+        onSuccess: @escaping (Value) -> Void,
+        onFailure: ((Error) -> Void)? = nil,
+        onLoading: (() -> Void)? = nil,
+        onComplete: (() -> Void)? = nil,
+        onIdle: (() -> Void)? = nil
     ) -> AnyCancellable {
         let cancellable = publisher
             .receive(on: DispatchQueue.main)
             .sink { [weak owner] state in
-                guard owner != nil else { return }
+                guard let _ = owner else { return }
                 switch state {
                 case .idle:
-                    idle?()
+                    onIdle?()
                 case .loading:
-                    loading?()
+                    onLoading?()
                 case .success(let value):
-                    didFinishLoading?()
-                    success(value)
+                    onSuccess(value)
+                    onComplete?()
                 case .failure(let error):
-                    didFinishLoading?()
-                    failure?(error)
+                    onFailure?(error)
+                    onComplete?()
                 }
             }
         store(cancellable, for: owner)

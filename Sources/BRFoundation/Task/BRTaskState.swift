@@ -7,6 +7,7 @@
 
 import Foundation
 
+public typealias BRTaskPublisher<T> = Published<BRTaskState<T>>.Publisher
 
 public enum BRTaskState<Value> {
     case idle
