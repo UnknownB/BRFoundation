@@ -8,6 +8,12 @@
 import Foundation
 
 
+public struct BRTaskStateWrap<T> {
+    public let task: Task<Void, Never>
+    public let publisher: Published<BRTaskState<T>>.Publisher
+}
+
+
 public enum BRTaskState<Value> {
     case idle
     case loading
