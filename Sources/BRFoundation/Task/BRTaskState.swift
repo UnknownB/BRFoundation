@@ -11,6 +11,11 @@ import Foundation
 public struct BRTaskStateWrap<T> {
     public let task: Task<Void, Never>
     public let publisher: Published<BRTaskState<T>>.Publisher
+    
+    public init(task: Task<Void, Never>, publisher: Published<BRTaskState<T>>.Publisher) {
+        self.task = task
+        self.publisher = publisher
+    }
 }
 
 
