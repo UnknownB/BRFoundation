@@ -34,8 +34,8 @@ extension Array: BRWrapperProtocol {}
 extension Data: BRWrapperProtocol {}
 extension Date: BRWrapperProtocol {}
 extension Dictionary: BRWrapperProtocol {}
+extension Optional: BRWrapperProtocol {}
 extension String: BRWrapperProtocol {}
-extension String?: BRWrapperProtocol {}
 extension URL: BRWrapperProtocol {}
 extension URLSession: BRWrapperProtocol {}
 
