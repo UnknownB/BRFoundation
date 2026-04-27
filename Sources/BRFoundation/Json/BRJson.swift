@@ -79,12 +79,8 @@ public enum BRJson {
     /// // }
     /// ```
     @available(iOS 13.0, *)
-    public static func string(with object: Any, options: JSONSerialization.WritingOptions = []) throws -> String {
-        let data = try JSONSerialization.data(withJSONObject: object, options: [
-            .prettyPrinted,
-            .sortedKeys,
-            .withoutEscapingSlashes
-        ])
+    public static func string(with object: Any, options: JSONSerialization.WritingOptions = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]) throws -> String {
+        let data = try JSONSerialization.data(withJSONObject: object, options: options)
         return String(data: data, encoding: .utf8)!
     }
 
