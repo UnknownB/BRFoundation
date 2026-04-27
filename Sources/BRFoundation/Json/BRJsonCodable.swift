@@ -9,8 +9,8 @@ import Foundation
 
 
 public protocol BRJSONCodable: Codable {
-    func toJSONData() throws -> Data
-    func toJSONString() throws -> String
+    func toJSONData(output: JSONEncoder.OutputFormatting) throws -> Data
+    func toJSONString(output: JSONEncoder.OutputFormatting) throws -> String
     static func fromJSONData(_ data: Data) throws -> Self
     static func fromJSONString(_ jsonString: String) throws -> Self
 }
@@ -30,8 +30,9 @@ public extension BRJSONCodable {
     /// let user = User(id: 1, name: "BR")
     /// let data = try user.toJSONData()
     /// ```
-    func toJSONData() throws -> Data {
+    func toJSONData(output: JSONEncoder.OutputFormatting = []) throws -> Data {
         let encoder = JSONEncoder()
+        encoder.outputFormatting = output
         return try encoder.encode(self)
     }
     
@@ -47,9 +48,9 @@ public extension BRJSONCodable {
     /// let user = User(id: 1, name: "BR")
     /// let data = try user.toJSONString()
     /// ```
-    func toJSONString() throws -> String {
+    func toJSONString(output: JSONEncoder.OutputFormatting = [.prettyPrinted]) throws -> String {
         let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted // 格式化排版
+        encoder.outputFormatting = output
         let data = try encoder.encode(self)
         guard let string = String(data: data, encoding: .utf8) else {
             throw NSError(domain: "Encoding", code: -1, userInfo: [NSLocalizedDescriptionKey: "無法轉為字串"])
