@@ -52,11 +52,11 @@ public enum BRJson {
     /// let json = "[\"a\", \"b\", \"c\"]"
     /// let array: [String] = try BRJson.parse(json)
     /// ```
-    public static func parse<T>(_ jsonString: String) throws -> T {
+    public static func parse<T>(_ jsonString: String, keys: [String: BRAnyType]? = nil) throws -> T {
         guard let data = jsonString.data(using: .utf8) else {
             throw BRJsonError.invalidFormat
         }
-        return try parse(data)
+        return try parse(data, keys: keys)
     }
     
     
