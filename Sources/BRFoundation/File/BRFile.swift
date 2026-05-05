@@ -97,11 +97,13 @@ public enum BRFile {
     /// - `.caches` 目錄下預設不進行備份
     /// - 需注意可重新下載或生成的檔案 (如圖片緩存、暫存檔) 不應該被備份
     @discardableResult
-    public static func createDirectory(_ url: URL, attributes: [FileAttributeKey : Any]? = nil, isExcluded: Bool = false) throws -> URL {
+    public static func createDirectory(_ url: URL, attributes: [FileAttributeKey : Any]? = nil, isExcluded: Bool? = nil) throws -> URL {
         if !existsDirectory(at: url) {
             try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: attributes)
         }
-        try setExcludedFromBackup(isExcluded, at: url)
+        if let isExcluded {
+            try setExcludedFromBackup(isExcluded, at: url)
+        }
         return url
     }
     
@@ -115,12 +117,9 @@ public enum BRFile {
     /// - `.caches` 目錄下預設不進行備份
     /// - 需注意可重新下載或生成的檔案 (如圖片緩存、暫存檔) 不應該被備份
     @discardableResult
-    public static func createDirectory(_ path: String, attributes: [FileAttributeKey : Any]? = nil, isExcluded: Bool = false) throws -> String {
-        if !existsDirectory(at: path) {
-            try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: attributes)
-        }
+    public static func createDirectory(_ path: String, attributes: [FileAttributeKey : Any]? = nil, isExcluded: Bool? = nil) throws -> String {
         let url = URL(fileURLWithPath: path)
-        try setExcludedFromBackup(isExcluded, at: url)
+        try createDirectory(url, attributes: attributes, isExcluded: isExcluded)
         return path
     }
 
@@ -203,10 +202,7 @@ public enum BRFile {
     /// 讀取 path text
     public static func readText(at path: String, options: Data.ReadingOptions = []) -> String? {
         let url = URL(fileURLWithPath: path)
-        if let data = readData(at: url, options: options) {
-            return String(data: data, encoding: .utf8)
-        }
-        return nil
+        return readText(at: url, options: options)
     }
 
 
@@ -312,11 +308,11 @@ public enum BRFile {
 
     
     /// 從 URL 讀取 JSON
-    public static func readJSON<T: Decodable>(_ type: T.Type, at url: URL) throws -> T? {
+    public static func readJSON<T: Decodable>(_ type: T.Type, at url: URL) -> T? {
         guard let data = readData(at: url) else {
             return nil
         }
-        return try JSONDecoder().decode(type, from: data)
+        return try? JSONDecoder().decode(type, from: data)
     }
     
 
