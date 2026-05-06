@@ -28,19 +28,19 @@ public extension BRWrapper where Base == URL {
     
     
     /// 取得快取後的 Data（若無則自動下載並建立快取）
-    func cachedData() async throws -> Data {
-        let cacheURL = try await cachedURL()
+    func cachedData(updateCache: Bool = false) async throws -> Data {
+        let cacheURL = try await cachedURL(updateCache: updateCache)
         return try Data(contentsOf: cacheURL)
     }
     
     
     /// 取得快取後的本地 URL（若無則自動下載並建立快取）
-    func cachedURL() async throws -> URL {
+    func cachedURL(updateCache: Bool = false) async throws -> URL {
         cleanupCacheIfNeeded()
         
         let cacheURL = cacheDirectory.appendingPathComponent(cacheFileName)
         
-        if isCached {
+        if isCached && !updateCache {
             return cacheURL
         }
         
