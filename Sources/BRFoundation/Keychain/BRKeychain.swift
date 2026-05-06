@@ -115,7 +115,7 @@ public class BRKeychain {
     /// 儲存 data 到指定的 account
     public func save(data: Data, for account: Account, accessControl: AccessControl = .afterFirstUnlock) throws {
         let query = baseQuery(for: account)
-        var attributes: [String: Any] = [kSecValueData as String: data]
+        let attributes: [String: Any] = [kSecValueData as String: data]
         
         var status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
         
