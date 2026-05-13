@@ -9,7 +9,6 @@ import Foundation
 
 
 /// 通用倒數計時器
-@MainActor
 open class BRCountdownTimer {
 
     private var timer: Timer?
@@ -36,27 +35,33 @@ open class BRCountdownTimer {
         onStart: (() -> Void)? = nil,
         onFinished: (() -> Void)? = nil
     ) {
-        stop()
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            stop()
 
-        let now = Date()
-        endTime = now.addingTimeInterval(seconds)
-        remaining = seconds
-        
-        onStart?()
-        onTick?(remaining)
-
-        timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
-            guard let self, let endTime else { return }
-            
             let now = Date()
-            remaining = max(0, endTime.timeIntervalSince(now))
+            endTime = now.addingTimeInterval(seconds)
+            remaining = seconds
             
-            if remaining <= 0 {
-                stop()
-                onFinished?()
-            } else {
-                onTick?(remaining)
+            onStart?()
+            onTick?(remaining)
+
+            let timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
+                guard let self, let endTime else { return }
+                
+                let now = Date()
+                remaining = max(0, endTime.timeIntervalSince(now))
+                
+                if remaining <= 0 {
+                    stop()
+                    onFinished?()
+                } else {
+                    onTick?(remaining)
+                }
             }
+            
+            RunLoop.main.add(timer, forMode: .common)
+            self.timer = timer
         }
     }
 
