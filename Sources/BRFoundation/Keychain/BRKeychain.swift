@@ -113,18 +113,16 @@ public class BRKeychain {
     
 
     /// 儲存 data 到指定的 account
-    public func save(data: Data, for account: Account, accessControl: AccessControl = .afterFirstUnlock) throws {
-        let query = baseQuery(for: account)
-        let attributes: [String: Any] = [kSecValueData as String: data]
+    public func save(data: Data?, for account: Account, accessControl: AccessControl = .afterFirstUnlock) throws {
+        try delete(for: account)
         
-        var status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
+        guard let data else { return }
         
-        if status == errSecItemNotFound {
-            var addQuery = query
-            addQuery[kSecValueData as String] = data
-            addQuery[kSecAttrAccessible as String] = accessControl.rawValue
-            status = SecItemAdd(addQuery as CFDictionary, nil)
-        }
+        var query = baseQuery(for: account)
+        query[kSecValueData as String] = data
+        query[kSecAttrAccessible as String] = accessControl.rawValue
+        
+        let status = SecItemAdd(query as CFDictionary, nil)
         
         guard status == errSecSuccess else {
             throw BRKeychainError.status(from: status)
