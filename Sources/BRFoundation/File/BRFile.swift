@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CryptoKit
 
 
 public enum BRFile {
@@ -146,31 +147,37 @@ public enum BRFile {
 
     
     /// 寫入 data 到 URL
-    public static func write(_ data: Data, options: Data.WritingOptions = [.atomic], at url: URL) throws {
-        try data.write(to: url, options: options)
+    public static func write(_ data: Data, options: Data.WritingOptions = [.atomic], at url: URL, encryptionKey: SymmetricKey? = nil) throws {
+        var dataToWrite = data
+        
+        if let key = encryptionKey {
+            dataToWrite = try data.br.aesGCMEncrypt(key: key)
+        }
+        
+        try dataToWrite.write(to: url, options: options)
     }
     
     
     /// 寫入 data 到 path
-    public static func write(_ data: Data, options: Data.WritingOptions = [.atomic], at path: String) throws {
+    public static func write(_ data: Data, options: Data.WritingOptions = [.atomic], at path: String, encryptionKey: SymmetricKey? = nil) throws {
         let url = URL(fileURLWithPath: path)
-        try write(data, at: url)
+        try write(data, options: options, at: url, encryptionKey: encryptionKey)
     }
     
     
     /// 寫入 text 到 URL
-    public static func write(_ text: String, options: Data.WritingOptions = [.atomic], at url: URL) throws {
+    public static func write(_ text: String, options: Data.WritingOptions = [.atomic], at url: URL, encryptionKey: SymmetricKey? = nil) throws {
         guard let data = text.data(using: .utf8) else {
             throw BRFileError.dataDecodingFailed(at: url)
         }
-        try write(data, at: url)
+        try write(data, options: options, at: url, encryptionKey: encryptionKey)
     }
     
     
     /// 寫入 text 到 path
-    public static func write(_ text: String, options: Data.WritingOptions = [.atomic], at path: String) throws {
+    public static func write(_ text: String, options: Data.WritingOptions = [.atomic], at path: String, encryptionKey: SymmetricKey? = nil) throws {
         let url = URL(fileURLWithPath: path)
-        try write(text, at: url)
+        try write(text, options: options, at: url, encryptionKey: encryptionKey)
     }
     
     
@@ -178,21 +185,27 @@ public enum BRFile {
     
     
     /// 讀取 url data
-    public static func readData(at url: URL, options: Data.ReadingOptions = []) -> Data? {
-        try? Data(contentsOf: url, options: options)
+    public static func readData(at url: URL, options: Data.ReadingOptions = [], encryptionKey: SymmetricKey? = nil) -> Data? {
+        var data = try? Data(contentsOf: url, options: options)
+        
+        if let key = encryptionKey {
+            data = try? data?.br.aesGCMDecrypt(key: key)
+        }
+        
+        return data
     }
     
     
     /// 讀取 path data
-    public static func readData(at path: String, options: Data.ReadingOptions = []) -> Data? {
+    public static func readData(at path: String, options: Data.ReadingOptions = [], encryptionKey: SymmetricKey? = nil) -> Data? {
         let url = URL(fileURLWithPath: path)
-        return readData(at: url, options: options)
+        return readData(at: url, options: options, encryptionKey: encryptionKey)
     }
     
     
     /// 讀取 url text
-    public static func readText(at url: URL, options: Data.ReadingOptions = []) -> String? {
-        if let data = readData(at: url, options: options) {
+    public static func readText(at url: URL, options: Data.ReadingOptions = [], encryptionKey: SymmetricKey? = nil) -> String? {
+        if let data = readData(at: url, options: options, encryptionKey: encryptionKey) {
             return String(data: data, encoding: .utf8)
         }
         return nil
@@ -200,9 +213,9 @@ public enum BRFile {
     
     
     /// 讀取 path text
-    public static func readText(at path: String, options: Data.ReadingOptions = []) -> String? {
+    public static func readText(at path: String, options: Data.ReadingOptions = [], encryptionKey: SymmetricKey? = nil) -> String? {
         let url = URL(fileURLWithPath: path)
-        return readText(at: url, options: options)
+        return readText(at: url, options: options, encryptionKey: encryptionKey)
     }
 
 
@@ -301,15 +314,15 @@ public enum BRFile {
     
     
     /// 寫入 JSON 到 URL
-    public static func writeJSON<T: Encodable>(_ object: T, at url: URL) throws {
+    public static func writeJSON<T: Encodable>(_ object: T, options: Data.WritingOptions = [.atomic], at url: URL, encryptionKey: SymmetricKey? = nil) throws {
         let data = try JSONEncoder().encode(object)
-        try write(data, at: url)
+        try write(data, options: options, at: url, encryptionKey: encryptionKey)
     }
 
     
     /// 從 URL 讀取 JSON
-    public static func readJSON<T: Decodable>(_ type: T.Type, at url: URL) -> T? {
-        guard let data = readData(at: url) else {
+    public static func readJSON<T: Decodable>(_ type: T.Type, at url: URL, options: Data.ReadingOptions = [], encryptionKey: SymmetricKey? = nil) -> T? {
+        guard let data = readData(at: url, options: options, encryptionKey: encryptionKey) else {
             return nil
         }
         return try? JSONDecoder().decode(type, from: data)
