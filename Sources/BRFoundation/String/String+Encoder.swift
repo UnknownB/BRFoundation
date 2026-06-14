@@ -26,4 +26,11 @@ public extension BRWrapper where Base == String {
     }
     
     
+    /// AES-GCM 加密
+    func aesGCMEncrypt(key: SymmetricKey) throws -> Data? {
+        guard let data = base.data(using: .utf8) else { return nil }
+        return try data.br.aesGCMEncrypt(key: key)
+    }
+    
+    
 }
