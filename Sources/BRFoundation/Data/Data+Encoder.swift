@@ -42,5 +42,13 @@ public extension BRWrapper where Base == Data {
         return try AES.GCM.open(sealedBox, using: key)
     }
     
+    
+    /// AES-GCM 解密
+    func aesGCMDecryptString(key: SymmetricKey) throws -> String? {
+        let sealedBox = try AES.GCM.SealedBox(combined: base)
+        let data = try AES.GCM.open(sealedBox, using: key)
+        return String(data: data, encoding: .utf8)
+    }
+    
 
 }
