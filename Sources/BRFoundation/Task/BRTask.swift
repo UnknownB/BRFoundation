@@ -133,30 +133,30 @@ public enum BRTask {
     ///
     /// ```
     @discardableResult
-    public static func bind<Owner: AnyObject, Value>(
-        to publisher: Published<BRTaskState<Value>>.Publisher,
+    public static func bind<Owner: AnyObject, P: Publisher, Value>(
+        to publisher: P,
         on owner: Owner,
-        onSuccess: @escaping (Value) -> Void,
-        onFailure: ((Error) -> Void)? = nil,
-        onLoading: (() -> Void)? = nil,
-        onComplete: (() -> Void)? = nil,
-        onIdle: (() -> Void)? = nil
-    ) -> AnyCancellable {
+        onSuccess: @escaping (Owner, Value) -> Void,
+        onFailure: ((Owner, Error) -> Void)? = nil,
+        onLoading: ((Owner) -> Void)? = nil,
+        onComplete: ((Owner) -> Void)? = nil,
+        onIdle: ((Owner) -> Void)? = nil
+    ) -> AnyCancellable where P.Output == BRTaskState<Value>, P.Failure == Never {
         let cancellable = publisher
             .receive(on: DispatchQueue.main)
             .sink { [weak owner] state in
-                guard let _ = owner else { return }
+                guard let safeOwner = owner else { return }
                 switch state {
                 case .idle:
-                    onIdle?()
+                    onIdle?(safeOwner)
                 case .loading:
-                    onLoading?()
+                    onLoading?(safeOwner)
                 case .success(let value):
-                    onSuccess(value)
-                    onComplete?()
+                    onSuccess(safeOwner, value)
+                    onComplete?(safeOwner)
                 case .failure(let error):
-                    onFailure?(error)
-                    onComplete?()
+                    onFailure?(safeOwner, error)
+                    onComplete?(safeOwner)
                 }
             }
         store(cancellable, for: owner)
@@ -200,16 +200,16 @@ public enum BRTask {
     ///
     /// ```
     @discardableResult
-    public static func bind<Owner: AnyObject, Value>(
-        to publisher: Published<Value>.Publisher,
+    public static func bind<Owner: AnyObject, P: Publisher>(
+        to publisher: P,
         on owner: Owner,
-        sink: @escaping (Value) -> Void
-    ) -> AnyCancellable {
+        sink: @escaping (Owner, P.Output) -> Void
+    ) -> AnyCancellable where P.Failure == Never {
         let cancellable = publisher
             .receive(on: DispatchQueue.main)
             .sink { [weak owner] value in
-                guard owner != nil else { return }
-                sink(value)
+                guard let safeOwner = owner else { return }
+                sink(safeOwner, value)
             }
         store(cancellable, for: owner)
         return cancellable

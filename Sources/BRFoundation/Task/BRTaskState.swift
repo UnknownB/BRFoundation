@@ -11,9 +11,9 @@ import Combine
 
 public struct BRTaskStateWrap<T> {
     public let task: Task<Void, Never>
-    public let publisher: Published<BRTaskState<T>>.Publisher
+    public let publisher: AnyPublisher<BRTaskState<T>, Never>
     
-    public init(task: Task<Void, Never>, publisher: Published<BRTaskState<T>>.Publisher) {
+    public init(task: Task<Void, Never>, publisher: AnyPublisher<BRTaskState<T>, Never>) {
         self.task = task
         self.publisher = publisher
     }
