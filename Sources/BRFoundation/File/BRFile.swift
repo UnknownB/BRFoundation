@@ -246,6 +246,34 @@ public enum BRFile {
     }
     
     
+    // MARK: - 移動
+    
+    
+    /// 移動 URL 檔案 or 目錄
+    @discardableResult
+    public static func move(at sourceURL: URL, to destinationURL: URL) -> Bool {
+        guard exists(at: sourceURL) else {
+            return false
+        }
+        
+        do {
+            try FileManager.default.moveItem(at: sourceURL, to: destinationURL)
+            return true
+        } catch {
+            return false
+        }
+    }
+    
+    
+    /// 移動 path 檔案 or 目錄
+    @discardableResult
+    public static func move(at sourcePath: String, to destinationPath: String) -> Bool {
+        let sourceURL = URL(fileURLWithPath: sourcePath)
+        let destinationURL = URL(fileURLWithPath: destinationPath)
+        return move(at: sourceURL, to: destinationURL)
+    }
+    
+    
     // MARK: - 目錄檔案清單
     
     
