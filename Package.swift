@@ -13,7 +13,7 @@ let package = Package(
             targets: ["BRFoundation"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/UnknownB/BRMacros", branch: "main")
+        .package(url: "https://github.com/UnknownB/BRMacros", from: "1.0.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
