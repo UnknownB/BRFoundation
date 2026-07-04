@@ -10,7 +10,7 @@ import Foundation
 
 public enum BRRegex {
     
-    private static func make(pattern: String) -> NSRegularExpression {
+    public static func make(pattern: String) -> NSRegularExpression {
         do {
             return try NSRegularExpression(pattern: pattern, options: .caseInsensitive)
         } catch {
