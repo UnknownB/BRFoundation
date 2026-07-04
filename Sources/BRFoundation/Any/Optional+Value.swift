@@ -7,7 +7,7 @@
 
 import Foundation
 
-public extension BRWrapper where Base: BROptionalType {
+public extension BRWrapper where Base: BROptionalProtocol {
     
     
     /// 當 optional 為 nil 時，回傳預設值，並在走 default 時印出指定的 log 訊息
