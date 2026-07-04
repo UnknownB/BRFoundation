@@ -8,7 +8,7 @@
 import Foundation
 
 
-/// 與 BRAnyType 搭配，用來比對 Any 型別
+/// `BRAnyValue` 是用於包裝 `Any?` 型別的通用結構體，提供快速的型別辨識功能
 public struct BRAnyValue {
     public let value: Any?
     
@@ -27,5 +27,30 @@ public struct BRAnyValue {
     
     public init(_ value: Any?) {
         self.value = value
+    }
+}
+
+
+public enum BRAnyType: CustomStringConvertible {
+    case int
+    case double
+    case string
+    case bool
+    case date
+    case array
+    case dictionary
+    case unknown
+    
+    public var description: String {
+        switch self {
+        case .int: return "Int"
+        case .double: return "Double"
+        case .string: return "String"
+        case .bool: return "Bool"
+        case .date: return "Date"
+        case .array: return "Array"
+        case .dictionary: return "Dictionary"
+        case .unknown: return "Unknown"
+        }
     }
 }
