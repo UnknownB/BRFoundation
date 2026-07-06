@@ -25,24 +25,24 @@ public final class BRTaskWrapper {
 /// BRTaskStorage 提供將 Task 以物件作為 Key 來儲存，當物件釋放時同步釋放
 public enum BRTaskStorage {
 
-    private static var storage = NSMapTable<AnyObject, BRTaskWrapper>(keyOptions: .weakMemory, valueOptions: .strongMemory)
-    
-    
+    private static var wrapperKey: UInt8 = 0
+
+
     /// 儲存 task
     public static func store(_ task: Task<Void, Never>, for owner: AnyObject) {
-        if let oldWrapper = storage.object(forKey: owner) {
+        if let oldWrapper = objc_getAssociatedObject(owner, &wrapperKey) as? BRTaskWrapper {
             oldWrapper.task.cancel()
         }
-        
+
         let newWrapper = BRTaskWrapper(task)
-        storage.setObject(newWrapper, forKey: owner)
+        objc_setAssociatedObject(owner, &wrapperKey, newWrapper, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
-    
-    
+
+
     /// 取得 task
     public static func task(for owner: AnyObject) -> Task<Void, Never>? {
-        storage.object(forKey: owner)?.task
+        (objc_getAssociatedObject(owner, &wrapperKey) as? BRTaskWrapper)?.task
     }
-    
+
 
 }

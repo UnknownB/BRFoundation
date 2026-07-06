@@ -12,17 +12,14 @@ import Combine
 @available(iOS 13.0, *)
 public enum BRTask {
     
-    
-    private static var storage = NSMapTable<AnyObject, NSMutableSet>(keyOptions: .weakMemory, valueOptions: .strongMemory)
+    private static var cancellablesKey: UInt8 = 0
 
-    
-    /// 自動儲存 cancellable，並且隨者 owner 一起釋放
     private static func store(_ cancellable: AnyCancellable, for owner: AnyObject) {
-        if let set = storage.object(forKey: owner) {
+        if let set = objc_getAssociatedObject(owner, &cancellablesKey) as? NSMutableSet {
             set.add(cancellable)
         } else {
             let newSet = NSMutableSet(object: cancellable)
-            storage.setObject(newSet, forKey: owner)
+            objc_setAssociatedObject(owner, &cancellablesKey, newSet, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
