@@ -27,4 +27,25 @@ public enum BRRegex {
     
     /// 台灣手機號碼
     public static let taiwanPhone = make(pattern: #"09\d{2}[-]?\d{3}[-]?\d{3}"#)
+    
+    /// 基礎的 CLI 指令偵測
+    public static let basicCLI = make(pattern: #"(?i)([;&|]+\s*(ls|cat|rm|mv|cp|chmod|chown|touch|curl|wget|sh|bash)\b)"#)
+
+    /// 基礎的 SQL 語法偵測
+    public static let basicSQL = make(pattern: ##"(?i)(['"]\s*(or|and)\s+\d+\s*=\s*\d+|\bunion\s+select\b|\bdrop\s+table\b|\binsert\s+into\b)"##)
+
+    /// 基礎的 XML 偵測
+    public static let basicXML = make(pattern: #"(?i)(<!DOCTYPE|<!ENTITY|<\?xml)"#)
+
+    /// 基礎的 JavaScript 語法偵測
+    public static let basicJavaScript = make(pattern: #"(?i)(<!--|<script\b|javascript:|\bon(?:error|click|load|mouseover)\s*=)"#)
+
+    /// Local File 存取偵測
+    public static let localFile = make(pattern: #"(?i)(\.\./|\.\.\\|/etc/passwd|/etc/shadow|/proc/self|file://)"#)
+
+    /// Format String 偵測
+    public static let formatString = make(pattern: #"(?:%[A-Za-z]){2,}"#)
+    
+    /// 資訊安全檢測特殊字串
+    public static let securityTest = make(pattern: #"(?i)\b\w+\s+&\s*del\s+\w+\b"#)
 }
