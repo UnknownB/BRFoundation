@@ -20,11 +20,11 @@ public enum BRRegex {
     }
 
     /// 電子郵件格式
-    public static let email = make(pattern: "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}")
+    public static let email = make(pattern: #"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,64}"#)
     
     /// 台灣身分證字號
-    public static let taiwanID = make(pattern: "([A-Z][12])(\\d{5})(\\d{3})")
+    public static let taiwanID = make(pattern: #"([A-Z][12])(\d{5})(\d{3})"#)
     
     /// 台灣手機號碼
-    public static let taiwanPhone = make(pattern: "(09\\d{2})[-]?(\\d{3})[-]?(\\d{3})")
+    public static let taiwanPhone = make(pattern: #"09\d{2}[-]?\d{3}[-]?\d{3}"#)
 }
