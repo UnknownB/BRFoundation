@@ -69,4 +69,21 @@ public extension BRWrapper where Base == String {
         return (matchedSubstring, afterEndSubstring)
     }
     
+    
+    /// 找出第一個與指定字串不同的 String.Index 位置
+    func firstDifferenceIndex(with other: String) -> String.Index? {
+        var baseIndex = base.startIndex
+        var otherIndex = other.startIndex
+
+        while baseIndex < base.endIndex, otherIndex < other.endIndex {
+            if base[baseIndex] != other[otherIndex] {
+                return baseIndex
+            }
+            base.formIndex(after: &baseIndex)
+            other.formIndex(after: &otherIndex)
+        }
+
+        return base.endIndex == other.endIndex ? nil : baseIndex
+    }
+    
 }

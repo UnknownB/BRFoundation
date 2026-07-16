@@ -102,4 +102,14 @@ final class StringSearchTests: XCTestCase {
         XCTAssertEqual(result?.matchedSubstring, " 這是匹配內容 ", "應該返回第一次匹配到的 start 到下一個 start 之間的內容")
         XCTAssertEqual(result?.afterEndSubstring, " 後續內容", "應返回第二個 start 後的剩餘內容")
     }
+    
+    // MARK: - firstDifferenceIndex(with:)
+    
+    func testFirstDifferenceIndex() {
+        let testString = "Hello"
+        let otherString = "Hell"
+        
+        XCTAssertEqual(testString.br.firstDifferenceIndex(with: otherString), testString.index(testString.startIndex, offsetBy: 4) , "應該是 4")
+    }
+
 }
