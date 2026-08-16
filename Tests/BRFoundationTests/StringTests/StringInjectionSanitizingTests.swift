@@ -57,7 +57,7 @@ struct StringInjectionSanitizingTests {
         #expect(payload.br.removingBasicInjectionPatterns() == ";;")
     }
 
-    @Test("Format String Injection - 2 組即命中（門檻已從 3 降為 2）")
+    @Test("Format String Injection - 2 組即命中")
     func testFormatStringInjectionTwoGroups() throws {
         #expect(";%s%d;".br.matches(BRRegex.formatString))
         #expect("%@%s".br.matches(BRRegex.formatString))

@@ -44,7 +44,7 @@ public enum BRRegex {
     public static let localFile = make(pattern: #"(?i)(\.\./|\.\.\\|/etc/passwd|/etc/shadow|/proc/self|file://)"#)
 
     /// Format String 偵測
-    public static let formatString = make(pattern: #"(?:%[A-Za-z]){2,}"#)
+    public static let formatString = make(pattern: #"(?:%[A-Za-z@]){2,}"#)
     
     /// 資訊安全檢測特殊字串
     public static let securityTest = make(pattern: #"(?i)\b\w+\s+&\s*del\s+\w+\b"#)
