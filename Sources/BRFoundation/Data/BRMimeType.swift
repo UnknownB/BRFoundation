@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import MobileCoreServices
+import UniformTypeIdentifiers
 
 
 public struct BRMimeType: Hashable, Equatable, RawRepresentable, ExpressibleByStringLiteral {
@@ -95,9 +95,9 @@ public struct BRMimeType: Hashable, Equatable, RawRepresentable, ExpressibleBySt
         let ext = ext.lowercased()
         
         // 系統方法查 UTI → MIME
-        if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, ext as CFString, nil)?.takeRetainedValue(),
-           let mime = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?.takeRetainedValue() {
-            return BRMimeType(rawValue: mime as String)
+        if #available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *),
+           let mime = UTType(filenameExtension: ext)?.preferredMIMEType {
+            return BRMimeType(rawValue: mime)
         }
         
         switch ext {
