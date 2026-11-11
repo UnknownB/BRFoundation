@@ -10,16 +10,17 @@ public extension BRWrapper where Base: Encodable {
     
     
     /// 將當前物件轉換為 JSON Data
-    func toJSONData(output: JSONEncoder.OutputFormatting = []) throws -> Data {
+    func toJSONData(output: JSONEncoder.OutputFormatting = [], date: JSONEncoder.DateEncodingStrategy = .deferredToDate) throws -> Data {
         let encoder = JSONEncoder()
         encoder.outputFormatting = output
+        encoder.dateEncodingStrategy = date
         return try encoder.encode(base)
     }
     
     
     /// 將當前物件轉換為 JSON 字串 (方便除錯或 API 傳輸)
-    func toJSONString(output: JSONEncoder.OutputFormatting = [.prettyPrinted]) throws -> String {
-        let data = try toJSONData(output: output)
+    func toJSONString(output: JSONEncoder.OutputFormatting = [.prettyPrinted], date: JSONEncoder.DateEncodingStrategy = .deferredToDate) throws -> String {
+        let data = try toJSONData(output: output, date: date)
         guard let string = String(data: data, encoding: .utf8) else {
             throw NSError(domain: "Encoding", code: -1, userInfo: [NSLocalizedDescriptionKey: "無法轉為字串"])
         }

@@ -9,10 +9,10 @@ import Foundation
 
 
 public protocol BRJSONCodable: Codable {
-    func toJSONData(output: JSONEncoder.OutputFormatting) throws -> Data
-    func toJSONString(output: JSONEncoder.OutputFormatting) throws -> String
-    static func fromJSONData(_ data: Data) throws -> Self
-    static func fromJSONString(_ jsonString: String) throws -> Self
+    func toJSONData(output: JSONEncoder.OutputFormatting, date: JSONEncoder.DateEncodingStrategy) throws -> Data
+    func toJSONString(output: JSONEncoder.OutputFormatting, date: JSONEncoder.DateEncodingStrategy) throws -> String
+    static func fromJSONData(_ data: Data, date: JSONDecoder.DateDecodingStrategy) throws -> Self
+    static func fromJSONString(_ jsonString: String, date: JSONDecoder.DateDecodingStrategy) throws -> Self
 }
 
 
@@ -30,12 +30,12 @@ public extension BRJSONCodable {
     /// let user = User(id: 1, name: "BR")
     /// let data = try user.toJSONData()
     /// ```
-    func toJSONData(output: JSONEncoder.OutputFormatting = []) throws -> Data {
+    func toJSONData(output: JSONEncoder.OutputFormatting = [], date: JSONEncoder.DateEncodingStrategy = .deferredToDate) throws -> Data {
         let encoder = JSONEncoder()
         encoder.outputFormatting = output
+        encoder.dateEncodingStrategy = date
         return try encoder.encode(self)
     }
-    
     
     /// 轉換成 Json String
     ///
@@ -48,10 +48,8 @@ public extension BRJSONCodable {
     /// let user = User(id: 1, name: "BR")
     /// let data = try user.toJSONString()
     /// ```
-    func toJSONString(output: JSONEncoder.OutputFormatting = [.prettyPrinted]) throws -> String {
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = output
-        let data = try encoder.encode(self)
+    func toJSONString(output: JSONEncoder.OutputFormatting = [.prettyPrinted], date: JSONEncoder.DateEncodingStrategy = .deferredToDate) throws -> String {
+        let data = try toJSONData(output: output, date: date)
         guard let string = String(data: data, encoding: .utf8) else {
             throw NSError(domain: "Encoding", code: -1, userInfo: [NSLocalizedDescriptionKey: "無法轉為字串"])
         }
@@ -69,8 +67,9 @@ public extension BRJSONCodable {
     ///
     /// let user = try User.fromJSONData()
     /// ```
-    static func fromJSONData(_ data: Data) throws -> Self {
+    static func fromJSONData(_ data: Data, date: JSONDecoder.DateDecodingStrategy = .deferredToDate) throws -> Self {
         let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = date
         return try decoder.decode(Self.self, from: data)
     }
     
@@ -85,11 +84,11 @@ public extension BRJSONCodable {
     ///
     /// let user = try User.fromJSONString()
     /// ```
-    static func fromJSONString(_ jsonString: String) throws -> Self {
+    static func fromJSONString(_ jsonString: String, date: JSONDecoder.DateDecodingStrategy = .deferredToDate) throws -> Self {
         guard let data = jsonString.data(using: .utf8) else {
             throw NSError(domain: "JSONDecoding", code: -1, userInfo: [NSLocalizedDescriptionKey: "無法將字串轉為 Data"])
         }
-        return try fromJSONData(data)
+        return try fromJSONData(data, date: date)
     }
     
     
