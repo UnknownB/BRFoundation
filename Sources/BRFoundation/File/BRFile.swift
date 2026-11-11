@@ -98,12 +98,12 @@ public enum BRFile {
     /// - `.caches` 目錄下預設不進行備份
     /// - 需注意可重新下載或生成的檔案 (如圖片緩存、暫存檔) 不應該被備份
     @discardableResult
-    public static func createDirectory(_ url: URL, attributes: [FileAttributeKey : Any]? = nil, isExcluded: Bool? = nil) throws -> URL {
+    public static func createDirectory(_ url: URL, attributes: [FileAttributeKey : Any]? = nil, isExcluded: Bool? = nil) -> URL {
         if !existsDirectory(at: url) {
-            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: attributes)
+            try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: attributes)
         }
         if let isExcluded {
-            try setExcludedFromBackup(isExcluded, at: url)
+            try? setExcludedFromBackup(isExcluded, at: url)
         }
         return url
     }
@@ -118,9 +118,9 @@ public enum BRFile {
     /// - `.caches` 目錄下預設不進行備份
     /// - 需注意可重新下載或生成的檔案 (如圖片緩存、暫存檔) 不應該被備份
     @discardableResult
-    public static func createDirectory(_ path: String, attributes: [FileAttributeKey : Any]? = nil, isExcluded: Bool? = nil) throws -> String {
+    public static func createDirectory(_ path: String, attributes: [FileAttributeKey : Any]? = nil, isExcluded: Bool? = nil) -> String {
         let url = URL(fileURLWithPath: path)
-        try createDirectory(url, attributes: attributes, isExcluded: isExcluded)
+        createDirectory(url, attributes: attributes, isExcluded: isExcluded)
         return path
     }
 
