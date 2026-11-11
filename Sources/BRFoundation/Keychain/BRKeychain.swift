@@ -114,9 +114,10 @@ public class BRKeychain {
 
     /// 儲存 data 到指定的 account
     public func save(data: Data?, for account: Account, accessControl: AccessControl = .afterFirstUnlock) throws {
-        try delete(for: account)
-        
-        guard let data else { return }
+        guard let data else {
+            try delete(for: account)
+            return
+        }
         
         var query = baseQuery(for: account)
         query[kSecValueData as String] = data
@@ -124,8 +125,22 @@ public class BRKeychain {
         
         let status = SecItemAdd(query as CFDictionary, nil)
         
-        guard status == errSecSuccess else {
+        if status == errSecSuccess {
+            return
+        }
+        
+        guard status == errSecDuplicateItem else {
             throw BRKeychainError.status(from: status)
+        }
+        
+        var attributes = [String: Any]()
+        attributes[kSecValueData as String] = data
+        attributes[kSecAttrAccessible as String] = accessControl.rawValue
+        
+        let updateStatus = SecItemUpdate(baseQuery(for: account) as CFDictionary, attributes as CFDictionary)
+        
+        guard updateStatus == errSecSuccess else {
+            throw BRKeychainError.status(from: updateStatus)
         }
     }
     
