@@ -193,7 +193,7 @@ struct StringInjectionSanitizingTests {
     @Test("正常路徑或網址不應被 Local File 偵測誤判")
     func testNormalPathsUnaffected() throws {
         let inputs = [
-            "https://pro360.com.tw/service/123",
+            "https://example.com/abc/123",
             "photo.jpg",
             "assets/images/logo.png",
         ]
